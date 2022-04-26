@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //源数据
+        let person = {
+            name: '张三',
+            age: 18
+        }
+        //模拟Vue2响应式原理
+        //#region
+        /*  let p = {}
+         Object.defineProperty(p,'name',{
+             configurable:true,
+             get(){//有人读取name时调用
+                 console.log('有人读取了我的属性');
+ 
+                 return person.name
+             },
+             set(value){//有人修改name时调用
+                 console.log('有人修改了那么属性我要去更新界面了');
+                 return person.name=value
+             }
+         })
+         Object.defineProperty(p,'age',{
+             configurable:true,
+             get(){//有人读取name时调用
+                 console.log('有人读取了我的属性');
+                 return person.age
+             },
+             set(value){//有人修改name时调用
+                 console.log('有人修改了我的属性我要去更新界面了');
+                 return person.age=value
+             }
+         }) */
+        //#endregion
+        //模拟Vue3响应式原理
+        //#region
+        const p = new Proxy(person,{
+            //有人读取p的某个属性调用
+            get(target,propName){
+                console.log(`有人读取了p身上的${propName}属性`);
+                return Reflect.get(target,propName)
+            },
+            //有人修改或追加p的某个属性调用
+            set(target,propName,value){
+                console.log(`有人修改了p身上的${propName}属性,我要去更新页面了!`);
+                Reflect.set(target,propName,value)
+            },
+            //有人修改或追加p的某个属性调用
+            deleteProperty(target,propName){
+                console.log(`有人删除了p身上的${propName}属性,我要去更新页面了!`);
+                return Reflect.deleteProperty(target,propName)
+            }
+        });
+        //#endregion
+        let obj = { a: 1, b: 2 }
+        //通过Object.defineProperty去操作
+        //#region
+/*         try {
+            const x1 = defineProperty(obj, 'c', {
+                get() {
+                    return 3
+                }
+            })
+            const x2 = defineProperty(obj, 'c', {
+                get() {
+                    return 4
+                }
+            })
+        } catch (error) {
+            console.log(err);
+        } */
+        //#endregion
+        //通过Reflect.defineProperty去操作
+        //#region 
+/*         const x3 = Reflect.defineProperty(obj, 'c', {
+            get() {
+                return 3
+            }
+        })
+        console.log(x3);
+        const x4 = Reflect.defineProperty(obj, 'c', {
+            get() {
+                return 4
+            }
+        })
+        console.log(x4); */
+        //#endregion
+    </script>
+</body>
+
+</html>
